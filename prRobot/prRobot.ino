@@ -23,10 +23,10 @@ Servo claw;  //servo controlling claw movements, assume only one servo needed ->
 #define POS_CLAW_OPEN 2
 
 //these are all just placeholder values
-#define shoulderLRPin 1
-#define shoulderUDPin 2
-#define elbowPin 3
-#define clawPin 4
+#define shoulderLRPin 2
+#define shoulderUDPin 3
+#define elbowPin 4
+#define clawPin 5
 
 int moveSpeed = 2;
 //thses are temp values
