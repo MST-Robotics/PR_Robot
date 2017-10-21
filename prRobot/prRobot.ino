@@ -23,10 +23,10 @@ Servo claw;  //servo controlling claw movements, assume only one servo needed ->
 #define POS_CLAW_OPEN 2
 
 //these are all just placeholder values
-#define shoulderLRPin 1
-#define shoulderUDPin 2
-#define elbowPin 3
-#define clawPin 4
+#define SHOULDER_LR_PIN 1
+#define SHOULDER_UD_PIN 2
+#define ELBOW_PIN 3
+#define CLAW_PIN 4
 
 int moveSpeed = 2;
 //thses are temp values
@@ -37,10 +37,10 @@ int pos_SUD_Y = 180;  //starting position for shoulderUD y-axis
 
 void setup() {
   // put your setup code here, to run once:
-  shoulderLR.attach(shoulderLRPin);
-  shoulderLR.attach(shoulderUDPin);
-  elbow.attach(elbowPin);
-  claw.attach(clawPin);  
+  shoulderLR.attach(SHOULDER_LR_PIN);
+  shoulderLR.attach(SHOULDER_UD_PIN);
+  elbow.attach(ELBOW_PIN);
+  claw.attach(CLAW_PIN);  
 }
 
 void loop() {
@@ -90,11 +90,11 @@ void loop() {
     }
 
     //close the claw
-    if(Xbox.getButtonClick(L1, i) {
+    if(Xbox.getButtonClick(L2, i) {
        claw.write(POS_CLAW_CLOSE); //sets servo position
     }
     //open the claw
-    if(Xbox.getButtonClick(R1, i) {
+    if(Xbox.getButtonClick(R2, i) {
       claw.write(POS_CLAW_OPEN); //sets servo position
     }
    
