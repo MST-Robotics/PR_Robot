@@ -36,6 +36,20 @@ int pos_SUD_X = 180;  //starting position for shoulderUD x-axis
 int pos_SUD_Y = 180;  //starting position for shoulderUD y-axis
 
 void setup() {
+  
+  for(uint8_t i = 0; i < 4; i++)
+  {
+    if(Xbox.Xbox360Connected[i])
+    {
+      if(Xbox.getButtonPress(L2, i) || Xbox.getButtonPress(R2, i)) 
+      {
+        Serial.print("L2: ");
+        Serial.print(Xbox.getButtonPress(L2, i));
+        Serial.print("\tR2: ");
+        Serial.println(Xbox.getButtonPress(R2, i));
+        Xbox.setRumbleOn(Xbox.getButtonPress(L2, i), Xbox.getButtonPress(R2, i), i);
+      }
+  
   // put your setup code here, to run once:
   shoulderLR.attach(SHOULDER_LR_PIN);
   shoulderLR.attach(SHOULDER_UD_PIN);
