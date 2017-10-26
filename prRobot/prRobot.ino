@@ -40,7 +40,7 @@ int pos_SLR_X= 180; //starting position for shoulderLR x-axis
 int pos_SLR_Y = 180; //starting position for shoulderLR y-axis
 int pos_SUD_X = 180;  //starting position for shoulderUD x-axis
 int pos_SUD_Y = 180;  //starting position for shoulderUD y-axis
-
+//SLR_Y is not used SUD_X not used
 //Creating these just so code compiles
 int pos_ELBOW_Y = 180;
 
@@ -121,7 +121,11 @@ void loop() {
         pos_ELBOW_Y = LOWER_BOUND; 
       elbow.write(pos_ELBOW_Y); //sets servo position
     }
-//pos_ELBOW_Y does not exist
+    //pos_ELBOW_Y does not exist
+    //pos_ELBOW_X needs to be added
+
+
+    
     //close the claw
     if(Xbox.getButtonClick(L2, i)) {
        claw.write(POS_CLAW_CLOSE); //sets servo position
