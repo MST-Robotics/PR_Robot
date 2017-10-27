@@ -36,19 +36,13 @@ Servo claw;  //servo controlling claw movements, assume only one servo needed ->
 
 int moveSpeed = 2;
 //thses are temp values
-int pos_SLR_X= 180; //starting position for shoulderLR x-axis
-int pos_SLR_Y = 180; //starting position for shoulderLR y-axis
-int pos_SUD_X = 180;  //starting position for shoulderUD x-axis
-int pos_SUD_Y = 180;  //starting position for shoulderUD y-axis
-
-//SLR_Y is not used SUD_X not used
+int pos_slr= 180; //starting position for shoulderLR x-axis
+int pos_sud = 180;  //starting position for shoulderUD y-axis
 //Creating these just so code compiles
-int pos_ELBOW_Y = 180;
+int pos_elbow = 180;
 
 void setup() {
-
-    Serial.begin(115200);
-
+  Serial.begin(115200);  //serial initialization
 #if !defined(__MIPSEL__)
   while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
 #endif
@@ -56,88 +50,83 @@ void setup() {
     Serial.print(F("\r\nOSC did not start"));
     while (1); //halt
   }
-
   Serial.print(F("\r\nXbox Wireless Receiver Library Started"));
 
-
-  // put your setup code here, to run once:
-  shoulderLR.attach(SHOULDER_LR_PIN);
+  shoulderLR.attach(SHOULDER_LR_PIN); //attaches a servo to a pin
   shoulderLR.attach(SHOULDER_UD_PIN);
   elbow.attach(ELBOW_PIN);
   claw.attach(CLAW_PIN);  
 }
 
 void loop() {
-  Usb.Task();
+  Usb.Task();  //"polls connected usb devices for updates to their status"
   if (Xbox.XboxReceiverConnected) {
-
-    for(uint8_t i = 0; i < 4; i++)
+    for(uint8_t i = 0; i < 4; i++) //for each possible controller
     {
-      if(Xbox.Xbox360Connected[i])
+      if(Xbox.Xbox360Connected[i]) //if it is connected
       {
-        if(Xbox.getButtonPress(L2, i) || Xbox.getButtonPress(R2, i)) 
+        if(Xbox.getButtonPress(L2, i) || Xbox.getButtonPress(R2, i))  //if a trigger is pressed
         {
           Serial.print("L2: ");
           Serial.print(Xbox.getButtonPress(L2, i));
           Serial.print("\tR2: ");
-          Serial.println(Xbox.getButtonPress(R2, i));
-          Xbox.setRumbleOn(Xbox.getButtonPress(L2, i), Xbox.getButtonPress(R2, i), i);
+          Serial.println(Xbox.getButtonPress(R2, i));  //output some numbers to serial
+          //and make them vibrate
+          Xbox.setRumbleOn(Xbox.getButtonPress(L2, i), Xbox.getButtonPress(R2, i), i); 
         }
     
-        //if left joystick x-axis is triggered   (shoulderLR)
-        int i = 0;
+        //if left joystick x-axis is triggered  -> moves shoulderLR
         if(Xbox.getAnalogHat(LeftHatX, i) > 7500) {
-          Serial.print("left stick x-axis +\n");
-          pos_SLR_X += moveSpeed;  //make it move a little
-          if(pos_SLR_X > UPPER_BOUND)  //check to make sure the bounds are correct
-            pos_SLR_X = UPPER_BOUND;
-          shoulderLR.write(pos_SLR_X); //sets servo position
+          Serial.print("shoulder right\n");         
+          pos_slr += moveSpeed;  //make it move a little
+          if(pos_slr > UPPER_BOUND)  //check to make sure the bounds are correct
+            pos_slr = UPPER_BOUND;
+          shoulderLR.write(pos_slr); //sets servo position
         }
         if(Xbox.getAnalogHat(LeftHatX, i) < -7500) {
-          Serial.print("left stick x-axis -\n");
-          pos_SLR_X -= moveSpeed;  //make it move a little
-          if(pos_SLR_X < LOWER_BOUND) //check to make sure the bounds are correct
-            pos_SLR_X = LOWER_BOUND; 
-          shoulderLR.write(pos_SLR_X); //sets servo position
+          Serial.print("shoulder left\n");  
+          pos_slr -= moveSpeed;  //make it move a little
+          if(pos_slr < LOWER_BOUND) //check to make sure the bounds are correct
+            pos_slr = LOWER_BOUND; 
+          shoulderLR.write(pos_slr); //sets servo position
         }
         
         //if left joystick y-axis is triggered   (shoulderUD)
         if(Xbox.getAnalogHat(LeftHatY, i) > 7500) {
-          Serial.print("left stick y-axis +\n");
-          pos_SUD_Y += moveSpeed;  //make it move a little
-          if(pos_SUD_Y > UPPER_BOUND)  //check to make sure the bounds are correct
-            pos_SUD_Y = UPPER_BOUND;
-          shoulderUD.write(pos_SUD_Y); //sets servo position
+          Serial.print("shoulder up\n");
+          pos_sud += moveSpeed;  //make it move a little
+          if(pos_sud > UPPER_BOUND)  //check to make sure the bounds are correct
+            pos_sud = UPPER_BOUND;
+          shoulderUD.write(pos_sud); //sets servo position
         }
         if(Xbox.getAnalogHat(LeftHatY, i) < -7500) {
-          Serial.print("left stick y-axis -\n");
-          pos_SUD_Y -= moveSpeed;  //make it move a little
-          if(pos_SUD_Y < LOWER_BOUND) //check to make sure the bounds are correct
-            pos_SUD_Y = LOWER_BOUND; 
-          shoulderUD.write(pos_SUD_Y); //sets servo position
+          Serial.print("shoulder down\n");
+          pos_sud -= moveSpeed;  //make it move a little
+          if(pos_sud < LOWER_BOUND) //check to make sure the bounds are correct
+            pos_sud = LOWER_BOUND; 
+          shoulderUD.write(pos_sud); //sets servo position
         }
         
         //if right joystick y-axis is triggered  (elbow)  
         if(Xbox.getAnalogHat(RightHatY, i) > 7500) {
-          Serial.print("right stick y-axis +\n");
-          pos_ELBOW_Y += moveSpeed;  //make it move a little
-          if(pos_ELBOW_Y > UPPER_BOUND)  //check to make sure the bounds are correct
-            pos_ELBOW_Y = UPPER_BOUND;
-          elbow.write(pos_ELBOW_Y); //sets servo position
+          Serial.print("elbow up\n");
+          pos_elbow += moveSpeed;  //make it move a little
+          if(pos_elbow > UPPER_BOUND)  //check to make sure the bounds are correct
+            pos_elbow = UPPER_BOUND;
+          elbow.write(pos_elbow); //sets servo position
         }
         if(Xbox.getAnalogHat(RightHatY, i) < -7500) {
-          Serial.print("right stick y-axis -\n");
-          pos_ELBOW_Y -= moveSpeed;  //make it move a little
-          if(pos_ELBOW_Y < LOWER_BOUND) //check to make sure the bounds are correct
-            pos_ELBOW_Y = LOWER_BOUND; 
-          elbow.write(pos_ELBOW_Y); //sets servo position
+          Serial.print("elbox down\n");
+          pos_elbow -= moveSpeed;  //make it move a little
+          if(pos_elbow < LOWER_BOUND) //check to make sure the bounds are correct
+            pos_elbow = LOWER_BOUND; 
+          elbow.write(pos_elbow); //sets servo position
         }
-        //pos_ELBOW_Y does not exist
-        //pos_ELBOW_X needs to be added   
+//      pos_ELBOW_X needs to be added
+
         
         //close the claw
         if(Xbox.getButtonClick(L2, i)) {
-    
           Serial.print("claw close\n");
           claw.write(POS_CLAW_CLOSE); //sets servo position
         }
