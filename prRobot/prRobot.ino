@@ -133,7 +133,6 @@ void loop() {
             pos_elbow = LOWER_BOUND; 
           elbow.write(pos_elbow); //sets servo position
         }
-//      pos_ELBOW_X needs to be added
 
         
         //close the claw
