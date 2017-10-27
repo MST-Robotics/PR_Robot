@@ -34,6 +34,12 @@ Servo claw;  //servo controlling claw movements, assume only one servo needed ->
 #define ELBOW_PIN 3
 #define CLAW_PIN 4
 
+//led constants
+//placeholder pin values for all LEDs
+const unsigned char LED_PINS[] = {1,2,3,4,5,6,7,8,9};//The LED_PINS array; can add more arrays to seperate LEDs for different goal posts.
+char led_pin_array_size = sizeof(LED_PINS)/sizeof(LED_PINS); //size of the LED_PINS array
+const unsigned int LED_DELAY = 1000; //time between leds turning on (ms)
+
 int moveSpeed = 2;
 //thses are temp values
 int pos_SLR_X= 180; //starting position for shoulderLR x-axis
@@ -65,6 +71,11 @@ void setup() {
   shoulderLR.attach(SHOULDER_UD_PIN);
   elbow.attach(ELBOW_PIN);
   claw.attach(CLAW_PIN);  
+
+  //setting all LED's to output
+  for(unsigned char i = 0; i < led_pin_array_size-1;i++){
+    pinMode(LED_PINS[i], OUTPUT);
+  }
 }
 
 void loop() {
@@ -145,9 +156,36 @@ void loop() {
         if(Xbox.getButtonClick(R2, i)) {
           Serial.print("claw open\n");
           claw.write(POS_CLAW_OPEN); //sets servo position
-        }   
+        }
+         //if start button gets triggered
+        if (Xbox.getButtonClick(START, i))
+          turnOnAllLED(); //turns on all LED's
       }
     }
   }
 }
 
+
+/**
+ * Turns on all LEDs listed in the LED_PINS array
+ * @Param None, xbox start button has been pressed
+ * @Return All LED specified should turn on.
+ */
+void turnOnAllLED(){
+  for(unsigned char i = 0; i < led_pin_array_size-1;i++){
+    digitalWrite(LED_PINS[i], HIGH);
+    delay(LED_DELAY);
+  }
+}
+
+/**
+ * Turns off all LEDs listed in the LED_PINS array (not implemented)
+ * @Param None
+ * @Return All LED specified should turn off.
+ */
+void turnOffAllLED(){
+  for(unsigned char i = 0; i < led_pin_array_size-1;i++){
+    digitalWrite(LED_PINS[i], LOW);
+    delay(LED_DELAY);
+  }
+}
