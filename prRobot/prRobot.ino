@@ -37,7 +37,7 @@ Servo claw;  //servo controlling claw movements, assume only one servo needed ->
 //led constants
 //placeholder pin values for all LEDs
 const unsigned char LED_PINS[] = {1,2,3,4,5,6,7,8,9};//The LED_PINS array; can add more arrays to seperate LEDs for different goal posts.
-char led_pin_array_size = sizeof(LED_PINS)/sizeof(LED_PINS); //size of the LED_PINS array
+char led_pin_array_size = sizeof(LED_PINS)/sizeof(LED_PINS[0]); //size of the LED_PINS array
 const unsigned int LED_DELAY = 1000; //time between leds turning on (ms)
 
 int moveSpeed = 2;
